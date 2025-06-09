@@ -2,251 +2,200 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Clock, CheckCircle, X } from "lucide-react";
+import { AlertTriangle, Clock, CheckCircle, Brain, Lightbulb, TrendingUp } from "lucide-react";
+import { useState } from "react";
 
 const AlertsPanel = () => {
+  const [selectedAlert, setSelectedAlert] = useState<string | null>(null);
+
   const alerts = [
     {
-      id: 1,
-      type: "Critical",
-      title: "Steam Trap T-45 Failure",
-      description: "Trap stuck open causing $1,200/day loss",
-      location: "HPS Header",
-      timestamp: "2 minutes ago",
-      threshold: "$1,000/day",
-      currentValue: "$1,200/day",
-      status: "Active"
+      id: "alert-1",
+      title: "Steam Trap T-45 Critical Failure",
+      severity: "critical",
+      location: "HPS Header - Section B",
+      loss: 1200,
+      timestamp: "2 hours ago",
+      description: "Trap stuck open, continuous steam blow-through detected",
+      aiSuggestion: "Based on historical data and similar failures, this trap type typically fails due to worn seat surfaces. Immediate replacement recommended. Consider upgrading to thermodynamic trap design which has 40% longer lifespan in this service.",
+      rootCause: "Thermal cycling fatigue on valve seat",
+      confidence: 92
     },
     {
-      id: 2,
-      type: "High",
-      title: "Boiler Blowdown Exceeds Limit",
-      description: "Blowdown frequency increased 25% above normal",
-      location: "Boiler House",
-      timestamp: "15 minutes ago",
-      threshold: "$1,500/day",
-      currentValue: "$2,100/day",
-      status: "Active"
+      id: "alert-2", 
+      title: "Let-down Station LV2 Efficiency Drop",
+      severity: "high",
+      location: "Low Pressure Skid",
+      loss: 900,
+      timestamp: "4 hours ago",
+      description: "Pilot system showing irregular control patterns",
+      aiSuggestion: "Pattern analysis indicates pilot diaphragm degradation. Recommend pneumatic system calibration followed by diaphragm inspection. Similar patterns in Unit 3 were resolved with pilot replacement, reducing losses by 85%.",
+      rootCause: "Pilot diaphragm wear affecting control response",
+      confidence: 87
     },
     {
-      id: 3,
-      type: "Medium",
-      title: "Flash Tank Venting High",
-      description: "Venting losses increased due to pressure control issue",
-      location: "Condensate Recovery",
-      timestamp: "1 hour ago",
-      threshold: "$1,200/day",
-      currentValue: "$1,800/day",
-      status: "Acknowledged"
-    },
-    {
-      id: 4,
-      type: "Low",
-      title: "Insulation Degradation Alert",
-      description: "Thermal imaging detected hot spots on main steam line",
-      location: "Main Steam Line",
-      timestamp: "3 hours ago",
-      threshold: "$300/day",
-      currentValue: "$480/day",
-      status: "Resolved"
+      id: "alert-3",
+      title: "Heat Exchanger HE-01 Fouling",
+      severity: "medium",
+      location: "Process Unit A",
+      loss: 750,
+      timestamp: "6 hours ago", 
+      description: "Increasing pressure drop across tubes, efficiency declining",
+      aiSuggestion: "Fouling prediction model suggests chemical cleaning cycle now will prevent 60% more loss accumulation. Optimal cleaning window identified based on production schedule. Consider upgrading to enhanced heat transfer tubes for 25% better fouling resistance.",
+      rootCause: "Organic deposit buildup on tube surfaces",
+      confidence: 89
     }
   ];
 
-  const getAlertColor = (type: string) => {
-    switch (type) {
-      case "Critical": return "bg-red-50 border-red-200 text-red-800";
-      case "High": return "bg-orange-50 border-orange-200 text-orange-800";
-      case "Medium": return "bg-yellow-50 border-yellow-200 text-yellow-800";
-      case "Low": return "bg-blue-50 border-blue-200 text-blue-800";
-      default: return "bg-gray-50 border-gray-200 text-gray-800";
+  const getSeverityColor = (severity: string) => {
+    switch (severity) {
+      case "critical": return "bg-red-100 text-red-800 border-red-200";
+      case "high": return "bg-orange-100 text-orange-800 border-orange-200";
+      case "medium": return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      default: return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
-  const getBadgeColor = (type: string) => {
-    switch (type) {
-      case "Critical": return "bg-red-100 text-red-800";
-      case "High": return "bg-orange-100 text-orange-800";
-      case "Medium": return "bg-yellow-100 text-yellow-800";
-      case "Low": return "bg-blue-100 text-blue-800";
-      default: return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "Active": return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      case "Acknowledged": return <Clock className="h-4 w-4 text-yellow-600" />;
-      case "Resolved": return <CheckCircle className="h-4 w-4 text-green-600" />;
-      default: return <X className="h-4 w-4 text-gray-600" />;
-    }
+  const getConfidenceColor = (confidence: number) => {
+    if (confidence >= 90) return "text-green-600";
+    if (confidence >= 80) return "text-yellow-600";
+    return "text-orange-600";
   };
 
   return (
-    <div className="space-y-6">
-      {/* Alert Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-red-50 border-red-200">
-          <CardContent className="p-4">
-            <div className="flex items-center">
-              <AlertTriangle className="h-8 w-8 text-red-600" />
-              <div className="ml-3">
-                <div className="text-2xl font-bold text-red-800">2</div>
-                <div className="text-sm text-red-600">Critical Alerts</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-orange-50 border-orange-200">
-          <CardContent className="p-4">
-            <div className="flex items-center">
-              <AlertTriangle className="h-8 w-8 text-orange-600" />
-              <div className="ml-3">
-                <div className="text-2xl font-bold text-orange-800">1</div>
-                <div className="text-sm text-orange-600">High Priority</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-green-50 border-green-200">
-          <CardContent className="p-4">
-            <div className="flex items-center">
-              <CheckCircle className="h-8 w-8 text-green-600" />
-              <div className="ml-3">
-                <div className="text-2xl font-bold text-green-800">1</div>
-                <div className="text-sm text-green-600">Resolved Today</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="bg-blue-50 border-blue-200">
-          <CardContent className="p-4">
-            <div className="flex items-center">
-              <Clock className="h-8 w-8 text-blue-600" />
-              <div className="ml-3">
-                <div className="text-2xl font-bold text-blue-800">$3,300</div>
-                <div className="text-sm text-blue-600">Active Loss/Day</div>
-              </div>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <AlertTriangle className="h-5 w-5 mr-2 text-red-600" />
+              Active Loss Alerts
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {alerts.map((alert) => (
+                <div
+                  key={alert.id}
+                  className={`p-4 rounded-lg border-l-4 cursor-pointer transition-all hover:shadow-md ${
+                    alert.severity === "critical" ? "border-l-red-500 bg-red-50" :
+                    alert.severity === "high" ? "border-l-orange-500 bg-orange-50" :
+                    "border-l-yellow-500 bg-yellow-50"
+                  } ${selectedAlert === alert.id ? "ring-2 ring-blue-500" : ""}`}
+                  onClick={() => setSelectedAlert(selectedAlert === alert.id ? null : alert.id)}
+                >
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <h3 className="font-semibold text-gray-900">{alert.title}</h3>
+                        <Badge className={getSeverityColor(alert.severity)}>
+                          {alert.severity.toUpperCase()}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-1">{alert.location}</p>
+                      <p className="text-sm text-gray-700">{alert.description}</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xl font-bold text-red-600">${alert.loss}/day</div>
+                      <div className="text-xs text-gray-500 flex items-center">
+                        <Clock className="h-3 w-3 mr-1" />
+                        {alert.timestamp}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Alert List */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span>Recent Alerts</span>
-            <Button variant="outline" size="sm">
-              Configure Thresholds
-            </Button>
+          <CardTitle className="flex items-center">
+            <Brain className="h-5 w-5 mr-2 text-purple-600" />
+            AI Loss Analysis
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {alerts.map((alert) => (
-              <div key={alert.id} className={`p-4 rounded-lg border ${getAlertColor(alert.type)}`}>
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-2">
-                      <Badge className={getBadgeColor(alert.type)}>
-                        {alert.type}
-                      </Badge>
-                      <div className="flex items-center space-x-2">
-                        {getStatusIcon(alert.status)}
-                        <span className="text-sm font-medium">{alert.status}</span>
+          {selectedAlert ? (
+            <div className="space-y-4">
+              {(() => {
+                const alert = alerts.find(a => a.id === selectedAlert);
+                if (!alert) return null;
+                
+                return (
+                  <>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-2">{alert.title}</h3>
+                      <div className="grid grid-cols-1 gap-3">
+                        <div className="bg-blue-50 p-3 rounded-lg">
+                          <div className="flex items-center text-blue-600 mb-1">
+                            <TrendingUp className="h-4 w-4 mr-1" />
+                            <span className="text-sm font-medium">Daily Loss Impact</span>
+                          </div>
+                          <div className="text-xl font-bold">${alert.loss}</div>
+                        </div>
+                        
+                        <div className="bg-purple-50 p-3 rounded-lg">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium text-purple-600">AI Confidence</span>
+                            <span className={`text-sm font-bold ${getConfidenceColor(alert.confidence)}`}>
+                              {alert.confidence}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div 
+                              className="bg-purple-500 h-2 rounded-full transition-all duration-500"
+                              style={{ width: `${alert.confidence}%` }}
+                            ></div>
+                          </div>
+                        </div>
                       </div>
-                      <span className="text-sm text-gray-500">{alert.timestamp}</span>
                     </div>
                     
-                    <h3 className="font-semibold text-lg mb-1">{alert.title}</h3>
-                    <p className="text-sm text-gray-600 mb-2">{alert.description}</p>
-                    
-                    <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div className="space-y-3">
                       <div>
-                        <span className="font-medium">Location:</span>
-                        <div className="text-gray-600">{alert.location}</div>
+                        <h4 className="font-medium flex items-center mb-2">
+                          <Lightbulb className="h-4 w-4 mr-1 text-yellow-500" />
+                          AI-Generated Root Cause
+                        </h4>
+                        <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg">
+                          {alert.rootCause}
+                        </p>
                       </div>
+                      
                       <div>
-                        <span className="font-medium">Threshold:</span>
-                        <div className="text-gray-600">{alert.threshold}</div>
-                      </div>
-                      <div>
-                        <span className="font-medium">Current Value:</span>
-                        <div className="font-bold text-red-600">{alert.currentValue}</div>
+                        <h4 className="font-medium flex items-center mb-2">
+                          <Brain className="h-4 w-4 mr-1 text-purple-500" />
+                          AI Recommendation
+                        </h4>
+                        <p className="text-sm text-gray-700 bg-purple-50 p-3 rounded-lg">
+                          {alert.aiSuggestion}
+                        </p>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div className="flex space-x-2 ml-4">
-                    {alert.status === "Active" && (
-                      <>
-                        <Button variant="outline" size="sm">
-                          Acknowledge
-                        </Button>
-                        <Button variant="default" size="sm">
-                          Create Work Order
-                        </Button>
-                      </>
-                    )}
-                    {alert.status === "Acknowledged" && (
-                      <Button variant="default" size="sm">
-                        Mark Resolved
+                    
+                    <div className="flex space-x-2 pt-3">
+                      <Button size="sm" className="flex-1">
+                        <CheckCircle className="h-4 w-4 mr-1" />
+                        Accept AI Suggestion
                       </Button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Notification Settings */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Notification Settings</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-medium mb-3">Email Notifications</h4>
-              <div className="space-y-2">
-                <label className="flex items-center space-x-2">
-                  <input type="checkbox" className="rounded" defaultChecked />
-                  <span className="text-sm">Daily management summary</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input type="checkbox" className="rounded" defaultChecked />
-                  <span className="text-sm">Critical alerts (>$1000/day)</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input type="checkbox" className="rounded" />
-                  <span className="text-sm">Weekly trend reports</span>
-                </label>
-              </div>
+                      <Button variant="outline" size="sm" className="flex-1">
+                        Generate Alternative
+                      </Button>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
-            
-            <div>
-              <h4 className="font-medium mb-3">Mobile/Slack Alerts</h4>
-              <div className="space-y-2">
-                <label className="flex items-center space-x-2">
-                  <input type="checkbox" className="rounded" defaultChecked />
-                  <span className="text-sm">Critical equipment failures</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input type="checkbox" className="rounded" defaultChecked />
-                  <span className="text-sm">Threshold exceedances</span>
-                </label>
-                <label className="flex items-center space-x-2">
-                  <input type="checkbox" className="rounded" />
-                  <span className="text-sm">Maintenance reminders</span>
-                </label>
-              </div>
+          ) : (
+            <div className="text-center text-gray-500 py-8">
+              <Brain className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p className="mb-2">Select an alert to view AI analysis</p>
+              <p className="text-sm">Our AI analyzes patterns, predicts failures, and suggests optimal solutions</p>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>
