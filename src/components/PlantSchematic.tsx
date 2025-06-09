@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Thermometer, Gauge, Droplets } from "lucide-react";
+import { MapPin, Thermometer, Gauge, Droplets, DollarSign } from "lucide-react";
 import { useState } from "react";
 
 const PlantSchematic = () => {
