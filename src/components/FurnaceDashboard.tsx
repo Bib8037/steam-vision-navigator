@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fetchFurnaceData, FurnaceMetric } from "@/lib/furnaceApi";
-import { flame, thermometer, wind, droplet, gauge } from "lucide-react";
+import { Flame, Thermometer, Wind, Droplet, Gauge } from "lucide-react";
 
 interface FurnaceDashboardProps {
   selectedPlant: string;
@@ -68,7 +68,7 @@ const FurnaceDashboard = ({ selectedPlant }: FurnaceDashboardProps) => {
               <Card>
                 <CardHeader className="flex items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-gray-600">Thermal Efficiency</CardTitle>
-                  <thermometer className="h-5 w-5 text-blue-600" />
+                  <Thermometer className="h-5 w-5 text-blue-600" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-gray-900">{selectedFurnaceData.thermalEfficiency}%</div>
@@ -81,7 +81,7 @@ const FurnaceDashboard = ({ selectedPlant }: FurnaceDashboardProps) => {
               <Card>
                 <CardHeader className="flex items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-gray-600">Total Stack Loss</CardTitle>
-                  <wind className="h-5 w-5 text-orange-600" />
+                  <Wind className="h-5 w-5 text-orange-600" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-gray-900">
@@ -94,7 +94,7 @@ const FurnaceDashboard = ({ selectedPlant }: FurnaceDashboardProps) => {
               <Card>
                 <CardHeader className="flex items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-gray-600">Total Wall Loss</CardTitle>
-                  <flame className="h-5 w-5 text-red-600" />
+                  <Flame className="h-5 w-5 text-red-600" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-gray-900">
@@ -107,7 +107,7 @@ const FurnaceDashboard = ({ selectedPlant }: FurnaceDashboardProps) => {
               <Card>
                 <CardHeader className="flex items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium text-gray-600">Blowdown Loss</CardTitle>
-                  <droplet className="h-5 w-5 text-blue-600" />
+                  <Droplet className="h-5 w-5 text-blue-600" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-gray-900">{selectedFurnaceData.blowdownLoss}%</div>
