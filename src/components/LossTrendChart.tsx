@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from "recharts";
 import { TrendingDown } from "lucide-react";
@@ -22,7 +21,7 @@ const LossTrendChart = ({ detailed = false }: LossTrendChartProps) => {
     <Card className={detailed ? "col-span-full" : ""}>
       <CardHeader>
         <CardTitle className="flex items-center">
-          <TrendingDown className="h-5 w-5 mr-2 text-blue-600" />
+          <TrendingDown className="h-5 w-5 mr-2 text-[#009989]" />
           {detailed ? "Detailed 24-Day Loss Trend" : "Daily Steam Loss Trend"}
         </CardTitle>
       </CardHeader>
@@ -42,15 +41,15 @@ const LossTrendChart = ({ detailed = false }: LossTrendChartProps) => {
               />
               <Legend />
               
-              {/* Target band */}
-              <ReferenceLine y={11000} stroke="#22c55e" strokeDasharray="5 5" label="Target" />
-              <ReferenceLine y={12100} stroke="#f59e0b" strokeDasharray="5 5" label="Warning" />
+              {/* Target and warning reference lines */}
+              <ReferenceLine y={11000} stroke="#313283" strokeDasharray="5 5" label="Target" />
+              <ReferenceLine y={12100} stroke="#FAA61B" strokeDasharray="5 5" label="Warning" />
               
-              {/* Main trend line */}
+              {/* Main total loss line */}
               <Line 
                 type="monotone" 
                 dataKey="total" 
-                stroke="#3b82f6" 
+                stroke="#009989" 
                 strokeWidth={3}
                 name="Total Loss"
                 dot={{ r: 6 }}
@@ -61,28 +60,28 @@ const LossTrendChart = ({ detailed = false }: LossTrendChartProps) => {
                   <Line 
                     type="monotone" 
                     dataKey="boiler" 
-                    stroke="#ef4444" 
+                    stroke="#313283" 
                     strokeWidth={2}
                     name="Boiler Blowdown"
                   />
                   <Line 
                     type="monotone" 
                     dataKey="traps" 
-                    stroke="#f97316" 
+                    stroke="#FAA61B" 
                     strokeWidth={2}
                     name="Trap Leakage"
                   />
                   <Line 
                     type="monotone" 
                     dataKey="venting" 
-                    stroke="#eab308" 
+                    stroke="#FF0000" 
                     strokeWidth={2}
                     name="Flash & Venting"
                   />
                   <Line 
                     type="monotone" 
                     dataKey="fouling" 
-                    stroke="#8b5cf6" 
+                    stroke="#009989" 
                     strokeWidth={2}
                     name="H/E Fouling"
                   />

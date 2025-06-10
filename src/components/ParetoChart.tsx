@@ -15,7 +15,7 @@ const ParetoChart = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center">
-          <BarChart3 className="h-5 w-5 mr-2 text-purple-600" />
+          <BarChart3 className="h-5 w-5 mr-2 text-[#009989]" />
           Pareto Analysis - Loss Categories
         </CardTitle>
       </CardHeader>
@@ -44,7 +44,7 @@ const ParetoChart = () => {
               <Bar 
                 yAxisId="left"
                 dataKey="loss" 
-                fill="#8b5cf6" 
+                fill="#009989" 
                 name="Daily Loss ($)"
                 radius={[4, 4, 0, 0]}
               />
@@ -52,7 +52,7 @@ const ParetoChart = () => {
                 yAxisId="right"
                 type="monotone" 
                 dataKey="cumulative" 
-                stroke="#ef4444" 
+                stroke="#313283" 
                 strokeWidth={3}
                 name="Cumulative %"
                 dot={{ r: 6 }}
