@@ -21,6 +21,7 @@ import TopLossesTable from "@/components/TopLossesTable";
 import ShiftComparison from "@/components/ShiftComparison";
 import AlertsPanel from "@/components/AlertsPanel";
 import { fetchKpiData, KpiMetric } from "@/lib/api";
+import FurnaceDashboard from "@/components/FurnaceDashboard";
 
 const iconMap: Record<string, React.ComponentType<any>> = {
   "Total Steam Loss": DollarSign,
@@ -81,7 +82,7 @@ const Index = () => {
                       <option value="MOC">MOC</option>
                       <option value="LSP">LSP</option>
                     </select>
-                    <p className="text-sm text-gray-600">Steam System - {selectedPlant} Plant</p>
+                    <p className="text-sm text-gray-600">Plant Operations - {selectedPlant}</p>
                   </div>
                 </div>
               </div>
@@ -124,8 +125,9 @@ const Index = () => {
         <KPICards data={kpiMetrics} plant={selectedPlant} />
         {/* Main Content Tabs */}
         <Tabs defaultValue="overview" className="mt-6">
-          <TabsList className="grid w-full grid-cols-5 mb-6">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-6 mb-6">
+            <TabsTrigger value="overview">Steam Overview</TabsTrigger>
+            <TabsTrigger value="furnace">Furnace</TabsTrigger>
             <TabsTrigger value="plant-map">Plant Map</TabsTrigger>
             <TabsTrigger value="trends">Trends</TabsTrigger>
             <TabsTrigger value="losses">Top Losses</TabsTrigger>
@@ -140,6 +142,9 @@ const Index = () => {
               <div className="lg:col-span-2"><TopLossesTable limit={5} /></div>
               <ShiftComparison />
             </div>
+          </TabsContent>
+          <TabsContent value="furnace">
+            <FurnaceDashboard selectedPlant={selectedPlant} />
           </TabsContent>
           <TabsContent value="plant-map"><PlantSchematic /></TabsContent>
           <TabsContent value="trends">
