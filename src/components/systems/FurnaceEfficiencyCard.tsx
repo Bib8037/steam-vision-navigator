@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Thermometer, Wind, Brick, Zap } from "lucide-react";
+import { Thermometer, Wind, Building, Zap } from "lucide-react";
 import { FurnaceEfficiencyMetrics } from "@/lib/olefinsApi";
 
 interface FurnaceEfficiencyCardProps {
