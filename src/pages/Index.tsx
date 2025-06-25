@@ -22,6 +22,7 @@ import ShiftComparison from "@/components/ShiftComparison";
 import AlertsPanel from "@/components/AlertsPanel";
 import { fetchKpiData, KpiMetric } from "@/lib/api";
 import FurnaceDashboard from "@/components/FurnaceDashboard";
+import OlefinsDashboard from "@/components/OlefinsDashboard";
 
 const iconMap: Record<string, React.ComponentType<any>> = {
   "Total Steam Loss": DollarSign,
@@ -41,7 +42,7 @@ const colorMap: Record<string, string> = {
 const Index = () => {
   const [selectedTimeRange, setSelectedTimeRange] = useState("24h");
   const [alertCount, setAlertCount] = useState(3);
-  const [selectedPlant, setSelectedPlant] = useState("ROC");
+  const [selectedPlant, setSelectedPlant] = useState("MOC");
   const [kpiMetrics, setKpiMetrics] = useState<(KpiMetric & { icon: React.ComponentType<any>; color: string })[]>([]);
 
   useEffect(() => {
@@ -71,18 +72,18 @@ const Index = () => {
                   <img src={logo} alt="Company Logo" className="h-12 w-24 object-contain" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">AI Loss Scanner</h1>
+                  <h1 className="text-2xl font-bold text-gray-900">AI Loss Scanner - Olefins Cracking Furnace</h1>
                   <div className="flex items-center space-x-2">
                     <select
                       value={selectedPlant}
                       onChange={(e) => setSelectedPlant(e.target.value)}
-                      className="px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                     >
-                      <option value="ROC">ROC</option>
                       <option value="MOC">MOC</option>
+                      <option value="ROC">ROC</option>
                       <option value="LSP">LSP</option>
                     </select>
-                    <p className="text-sm text-gray-600">Plant Operations - {selectedPlant}</p>
+                    <p className="text-sm text-gray-600">Olefins Plant - {selectedPlant}</p>
                   </div>
                 </div>
               </div>
@@ -119,53 +120,80 @@ const Index = () => {
           </div>
         </div>
       </div>
+      
       {/* Main Dashboard */}
       <div className="max-w-7xl mx-auto px-6 py-6">
         {/* KPI Cards */}
         <KPICards data={kpiMetrics} plant={selectedPlant} />
+        
         {/* Main Content Tabs */}
         <Tabs defaultValue="overview" className="mt-6">
-          <TabsList className="grid w-full grid-cols-6 mb-6">
-            <TabsTrigger value="overview">Steam Overview</TabsTrigger>
-            <TabsTrigger value="furnace">Furnace</TabsTrigger>
-            <TabsTrigger value="plant-map">Plant Map</TabsTrigger>
-            <TabsTrigger value="trends">Trends</TabsTrigger>
-            <TabsTrigger value="losses">Top Losses</TabsTrigger>
-            <TabsTrigger value="alerts">Alerts</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-5 mb-6">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="steam">Steam System</TabsTrigger>
+            <TabsTrigger value="boiler">Boiler System</TabsTrigger>
+            <TabsTrigger value="furnace">Furnace Efficiency</TabsTrigger>
+            <TabsTrigger value="flare">Flare Loss</TabsTrigger>
           </TabsList>
+          
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <LossTrendChart />
-              <ParetoChart />
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2"><TopLossesTable limit={5} /></div>
-              <ShiftComparison />
+            <OlefinsDashboard selectedPlant={selectedPlant} />
+          </TabsContent>
+          
+          <TabsContent value="steam" className="space-y-6">
+            <div className="grid grid-cols-1 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Steam System Detailed Analysis</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">Detailed steam system loss analysis will be displayed here.</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <LossTrendChart />
+                    <ParetoChart />
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
-          <TabsContent value="furnace">
+          
+          <TabsContent value="boiler" className="space-y-6">
+            <div className="grid grid-cols-1 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Boiler System Performance</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">Boiler system optimization and performance metrics.</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ShiftComparison />
+                    <TopLossesTable limit={5} />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="furnace" className="space-y-6">
             <FurnaceDashboard selectedPlant={selectedPlant} />
           </TabsContent>
-          <TabsContent value="plant-map"><PlantSchematic /></TabsContent>
-          <TabsContent value="trends">
-            <div className="space-y-6">
-              <LossTrendChart detailed />
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <ShiftComparison />
-                <Card>
-                  <CardHeader><CardTitle className="flex items-center"><TrendingUp className="h-5 w-5 mr-2 text-blue-600" /> Year-over-Year Comparison</CardTitle></CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg"><span className="text-sm font-medium">Today vs Last Year</span><span className="text-green-600 font-bold">-15.3% ($2,100 saved)</span></div>
-                      <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg"><span className="text-sm font-medium">This Month vs Last Year</span><span className="text-blue-600 font-bold">-8.7% ($18,400 saved)</span></div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+          
+          <TabsContent value="flare" className="space-y-6">
+            <div className="grid grid-cols-1 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Flare Loss Management</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 mb-4">Flare system efficiency and loss reduction strategies.</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <LossTrendChart />
+                    <AlertsPanel />
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
-          <TabsContent value="losses"><TopLossesTable limit={20} showActions /></TabsContent>
-          <TabsContent value="alerts"><AlertsPanel /></TabsContent>
         </Tabs>
       </div>
     </div>
